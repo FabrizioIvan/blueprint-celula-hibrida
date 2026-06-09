@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blueprint · Célula Híbrida de Ingeniería — RutaViva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f6f8;
+    --ink:#15202e;
+    --ink-soft:#48566a;
+    --ink-faint:#8190a3;
+    --surface:#ffffff;
+    --line:#e4e9f0;
+    --line-strong:#c9d2df;
+    --agent:#0d7c6f;
+    --agent-bg:#e4f2ef;
+    --human:#b45309;
+    --human-bg:#fbf0e1;
+    --risk:#be123c;
+    --risk-bg:#fdeaef;
+    --sys:#3b4a99;
+    --sys-bg:#eaecf8;
+    --display:"Space Grotesk",sans-serif;
+    --body:"Inter",sans-serif;
+    --mono:"JetBrains Mono",monospace;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--body);font-size:16.5px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--agent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---- top bar ---- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,246,248,.86);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-in{
+    max-width:var(--maxw);margin:0 auto;padding:13px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:13px;letter-spacing:.02em}
+  .brand .dot{width:9px;height:9px;border-radius:2px;background:var(--agent);box-shadow:0 0 0 3px var(--agent-bg)}
+  .brand b{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+  .topbar .meta{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+
+  /* ---- layout ---- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:grid;grid-template-columns:232px 1fr;gap:56px}
+  nav.toc{position:sticky;top:74px;align-self:start;height:calc(100vh - 92px);overflow-y:auto;padding:34px 0 40px}
+  nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:s}
+  nav.toc a{display:block;padding:6px 0;color:var(--ink-soft);font-size:13.5px;line-height:1.4;border-left:2px solid transparent;padding-left:14px;margin-left:-2px}
+  nav.toc a:hover{color:var(--ink);text-decoration:none;border-color:var(--line-strong)}
+  nav.toc a.lead{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:18px;padding-left:14px;pointer-events:none}
+  main{min-width:0;padding-bottom:120px}
+
+  /* ---- hero ---- */
+  header.hero{padding:64px 0 48px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--agent);font-weight:500}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.3rem,5vw,3.5rem);line-height:1.03;letter-spacing:-.025em;margin:18px 0 0}
+  h1 .sub{display:block;color:var(--ink-soft);font-weight:500;font-size:clamp(1.1rem,2.2vw,1.5rem);letter-spacing:-.01em;margin-top:14px}
+  .hero-lede{font-size:18px;color:var(--ink-soft);max-width:60ch;margin:26px 0 0}
+  .hero-strip{display:flex;flex-wrap:wrap;gap:0;margin-top:38px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+  .hero-strip .cell{flex:1 1 0;min-width:150px;padding:18px 20px;border-right:1px solid var(--line)}
+  .hero-strip .cell:last-child{border-right:0}
+  .hero-strip .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
+  .hero-strip .v{font-family:var(--display);font-size:1.55rem;font-weight:600;margin-top:6px;letter-spacing:-.02em}
+  .hero-strip .v small{font-size:.9rem;color:var(--ink-soft);font-weight:500}
+
+  /* ---- sections ---- */
+  section{padding:54px 0;border-bottom:1px solid var(--line)}
+  section:last-child{border-bottom:0}
+  .sec-head{display:flex;gap:18px;align-items:baseline;margin-bottom:8px}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--agent);font-weight:600;flex:none;padding-top:5px}
+  h2{font-family:var(--display);font-weight:600;font-size:1.85rem;letter-spacing:-.02em;margin:0;line-height:1.12}
+  h3{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;margin:34px 0 6px}
+  h4{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin:24px 0 8px;font-weight:600}
+  p{margin:12px 0}
+  strong{font-weight:600;color:var(--ink)}
+
+  /* ---- cards / grids ---- */
+  .ptc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  .ptc .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;border-top:3px solid var(--line-strong)}
+  .ptc .card.persona{border-top-color:var(--agent)}
+  .ptc .card.tarea{border-top-color:var(--sys)}
+  .ptc .card.contexto{border-top-color:var(--human)}
+  .ptc .card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .ptc .card.persona .tag{color:var(--agent)}
+  .ptc .card.tarea .tag{color:var(--sys)}
+  .ptc .card.contexto .tag{color:var(--human)}
+  .ptc .card h5{font-family:var(--display);font-size:1.05rem;font-weight:600;margin:8px 0 10px;letter-spacing:-.01em}
+  .ptc .card ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink-soft)}
+  .ptc .card li{margin:5px 0}
+
+  ul.clean{margin:14px 0;padding-left:20px}
+  ul.clean li{margin:7px 0}
+  ul.clean li::marker{color:var(--agent)}
+
+  /* ---- pills ---- */
+  .pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px;text-transform:uppercase;vertical-align:middle}
+  .pill.agent{background:var(--agent-bg);color:var(--agent)}
+  .pill.human{background:var(--human-bg);color:var(--human)}
+  .pill.risk{background:var(--risk-bg);color:var(--risk)}
+  .pill.sys{background:var(--sys-bg);color:var(--sys)}
+
+  /* ---- tables ---- */
+  .tbl-wrap{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
+  th,td{text-align:left;padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;background:#fafbfc;position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:0}
+  td.mono,th.mono{font-family:var(--mono);font-size:12.5px}
+  td .num{font-family:var(--mono);font-weight:600;color:var(--ink)}
+  tr.scope-no td:first-child{color:var(--risk)}
+
+  /* ---- callouts ---- */
+  .note{border-left:3px solid var(--agent);background:var(--agent-bg);padding:14px 18px;border-radius:0 10px 10px 0;margin:22px 0;font-size:14.5px}
+  .note.risk{border-color:var(--risk);background:var(--risk-bg)}
+  .note .lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--agent);display:block;margin-bottom:4px}
+  .note.risk .lab{color:var(--risk)}
+
+  /* ---- diagram ---- */
+  .figure{margin:26px 0 8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 18px 16px;overflow-x:auto}
+  .figure svg{display:block;margin:0 auto;min-width:680px;max-width:920px;width:100%;height:auto}
+  .figcap{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);text-align:center;margin-top:10px;letter-spacing:.02em}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:6px 0 14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{width:13px;height:13px;border-radius:3px;display:inline-block}
+
+  /* ---- roadmap ---- */
+  .phases{display:grid;gap:0;margin-top:24px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .phase{display:grid;grid-template-columns:64px 1fr;border-bottom:1px solid var(--line);background:var(--surface)}
+  .phase:last-child{border-bottom:0}
+  .phase .ph-n{background:#fafbfc;border-right:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:1.1rem;color:var(--agent)}
+  .phase .ph-body{padding:16px 20px}
+  .phase .ph-title{font-family:var(--display);font-weight:600;font-size:1.05rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .phase .ph-title .wk{font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-weight:500;letter-spacing:.04em}
+  .phase .ph-body p{margin:7px 0 0;font-size:14px;color:var(--ink-soft)}
+  .phase .deliv{font-family:var(--mono);font-size:12px;color:var(--ink);margin-top:8px}
+  .phase .deliv b{color:var(--agent)}
+
+  /* ---- checklist ---- */
+  .check{margin-top:22px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .check .row{display:grid;grid-template-columns:30px 1fr 110px;gap:14px;align-items:start;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--surface);font-size:14.5px}
+  .check .row:last-child{border-bottom:0}
+  .check .row .box{width:18px;height:18px;border:2px solid var(--agent);border-radius:5px;margin-top:2px;position:relative}
+  .check .row .box::after{content:"✓";position:absolute;inset:-2px 0 0 1px;color:var(--agent);font-size:14px;font-weight:700}
+  .check .row .w{font-family:var(--mono);font-size:11px;color:var(--ink-faint);text-align:right;padding-top:2px}
+  .check .crit{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;background:#fafbfc;padding:11px 18px;border-bottom:1px solid var(--line)}
+
+  footer{max-width:var(--maxw);margin:0 auto;padding:40px 28px 70px;color:var(--ink-faint);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
+
+  /* ---- entrance ---- */
+  .reveal{opacity:0;transform:translateY(10px);animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  @media (max-width:880px){
+    .wrap{grid-template-columns:1fr;gap:0}
+    nav.toc{display:none}
+    .ptc{grid-template-columns:1fr}
+    .hero-strip .cell{flex-basis:50%}
+    body{font-size:16px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{animation:none;opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><span class="dot"></span><b>Blueprint · Célula Híbrida</b></div>
+    <div class="meta">RutaViva · v1.0 · AMBA</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Índice">
+    <ol>
+      <a class="lead">Documento</a>
+      <a href="#resumen">Resumen ejecutivo</a>
+      <a href="#caso">01 · Definición del caso</a>
+      <a href="#ptc">02 · Persona–Tarea–Contexto</a>
+      <a href="#workflow">03 · Agentic workflow</a>
+      <a href="#stack">04 · Stack y justificación</a>
+      <a href="#guardrails">05 · Guardrails y riesgo</a>
+      <a href="#kpis">06 · KPIs operativos</a>
+      <a href="#roadmap">07 · Roadmap</a>
+      <a href="#checklist">08 · Checklist y éxito</a>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero reveal">
+      <span class="eyebrow">Blueprint Arquitectónico · Autonomía Controlada</span>
+      <h1>Célula Híbrida de Ingeniería
+        <span class="sub">Agentes autónomos y supervisión humana para el mantenimiento evolutivo de una SaaS de ruteo logístico</span>
+      </h1>
+      <p class="hero-lede">Diseño sistémico de un equipo donde agentes de código resuelven incidencias y tareas acotadas de forma autónoma, mientras la ingeniería humana conserva el criterio sobre arquitectura, riesgo y despliegue. El caso aplica sobre <strong>RutaViva</strong>, un producto real de optimización de rutas de última milla en el Área Metropolitana de Buenos Aires.</p>
+      <div class="hero-strip">
+        <div class="cell"><div class="k">Proceso</div><div class="v">Mantenimiento <small>evolutivo</small></div></div>
+        <div class="cell"><div class="k">Stack agéntico</div><div class="v">3 <small>herramientas</small></div></div>
+        <div class="cell"><div class="k">Autonomía meta</div><div class="v">L2 <small>acotada</small></div></div>
+        <div class="cell"><div class="k">Horizonte</div><div class="v">14 <small>semanas</small></div></div>
+      </div>
+    </header>
+
+    <section id="resumen">
+      <div class="sec-head"><span class="sec-num">00</span><h2>Resumen ejecutivo</h2></div>
+      <p>RutaViva es una SaaS que calcula rutas óptimas de reparto para PyMEs logísticas del conurbano bonaerense, combinando un motor de ruteo con restricciones (<span class="pill sys">OR-Tools VRPTW</span>), datos de calle reales (<span class="pill sys">OSRM</span>) y un frontend de seguimiento. El equipo de ingeniería es chico y la deuda operativa crece más rápido que la capacidad de resolverla: el backlog de bugs de baja y media complejidad, parches de seguridad y pequeñas mejoras consume el tiempo que debería ir a la evolución del producto.</p>
+      <p>La propuesta no es automatizar la ingeniería por completo —eso sería temerario sobre un sistema que toca operaciones de clientes que pagan por ruta—, sino montar una <strong>célula híbrida</strong>: una capa de agentes que toma el trabajo repetitivo y acotado bajo reglas estrictas, y una capa humana que mantiene el control sobre lo que importa. El agente propone y ejecuta dentro de límites; el humano decide dónde corre el límite, revisa lo sensible y se queda con la última palabra sobre el despliegue.</p>
+      <p>El documento define el rol del empleado digital con el marco Persona–Tarea–Contexto, justifica de forma comparada por qué se usan <strong>Claude Code</strong>, <strong>Codex</strong> y <strong>OpenClaw</strong>, diagrama el flujo de razonamiento con sus puntos de corte y de intervención humana, especifica los guardrails con escenarios de falla concretos, define KPIs con baseline y umbrales de alarma, y cierra con un roadmap por fases y una checklist de autoevaluación.</p>
+    </section>
+
+    <section id="caso">
+      <div class="sec-head"><span class="sec-num">01</span><h2>Definición estratégica del caso</h2></div>
+
+      <h3>El proceso de negocio</h3>
+      <p>El proceso elegido es el <strong>mantenimiento evolutivo y la resolución de incidencias</strong> del producto: el ciclo que va desde que entra un bug, una alerta de monitoreo o un pedido chico de mejora, hasta que ese cambio queda mergeado, desplegado y verificado en producción. Es un proceso real, medible y de alto volumen, y es donde más se diluye el tiempo de un equipo reducido.</p>
+
+      <h3>La ineficiencia actual</h3>
+      <p>Hoy todo el flujo es manual y lo absorben dos personas. El resultado típico: el <em>lead time</em> de un bug acotado (desde el reporte hasta el PR listo) ronda los dos o tres días hábiles, no por dificultad técnica sino por cola y cambio de contexto. Los parches de dependencias se postergan, lo que abre ventana de riesgo de seguridad. Y la cobertura de tests no crece porque "no hay tiempo". El costo no es solo de horas: es el costo de oportunidad de no estar trabajando en lo que diferencia al producto.</p>
+
+      <h3>Objetivo de automatización</h3>
+      <p>Trasladar a agentes la <strong>clase acotada de trabajo</strong> —triage, reproducción y diagnóstico de bugs, fixes de baja y media complejidad con sus tests, actualización de dependencias, parches de seguridad y aumento de cobertura— de modo que el ingeniero humano pase de <em>ejecutor</em> a <em>revisor y arquitecto</em>. La meta cuantitativa es reducir el lead time de la clase acotada por debajo de un día y liberar al menos un 40 % del tiempo humano hacia trabajo de mayor valor, sin degradar la calidad.</p>
+
+      <h3>Por qué híbrido y no automatización total</h3>
+      <p>Porque el sistema sobre el que se opera tiene consecuencias reales: una regresión en el motor de ruteo le entrega a un cliente una hoja de ruta inválida y le rompe la operación del día. Tres razones sostienen el enfoque híbrido. Primero, <strong>responsabilidad</strong>: ante un incidente, alguien tiene que responder, y eso exige criterio humano sobre el riesgo. Segundo, <strong>frontera de competencia</strong>: los agentes son muy buenos en tareas acotadas con criterio de éxito verificable (un test que pasa), pero impredecibles en decisiones de arquitectura, trade-offs de negocio o cambios sobre el núcleo de optimización. Tercero, <strong>confianza gradual</strong>: la autonomía se gana con evidencia, no se concede de entrada. El diseño deja explícito qué clase de trabajo nunca sale del control humano.</p>
+    </section>
+
+    <section id="ptc">
+      <div class="sec-head"><span class="sec-num">02</span><h2>Marco Persona – Tarea – Contexto</h2></div>
+      <p>El empleado digital se define como un <strong>ingeniero de mantenimiento junior, autónomo y auditable</strong>. No es un asistente que sugiere: es un par que toma trabajo de la cola, lo resuelve dentro de su alcance y entrega trabajo revisable. Su <em>job description</em> es deliberadamente angosta.</p>
+
+      <div class="ptc">
+        <div class="card persona">
+          <span class="tag">Persona</span>
+          <h5>Rol, capacidades y límites</h5>
+          <ul>
+            <li><strong>Rol:</strong> ingeniero de mantenimiento que atiende la cola acotada de incidencias y mejoras.</li>
+            <li><strong>Capacidades:</strong> lee y entiende el repo, reproduce bugs, escribe el fix y sus tests, corre la suite, actualiza dependencias y redacta el changelog del PR.</li>
+            <li><strong>Límites duros:</strong> no toca el núcleo del motor OR-Tools, ni migraciones de datos productivos, ni infraestructura, ni secretos, ni decisiones de pricing.</li>
+            <li><strong>Autonomía:</strong> escalera de madurez, no un interruptor (ver abajo).</li>
+          </ul>
+        </div>
+        <div class="card tarea">
+          <span class="tag">Tarea</span>
+          <h5>Actividades y complejidad</h5>
+          <ul>
+            <li><strong>Triage:</strong> clasifica cada item entrante en trivial / acotado / complejo / fuera-de-alcance.</li>
+            <li><strong>Diagnóstico:</strong> reproduce y localiza la causa raíz.</li>
+            <li><strong>Implementación:</strong> fix + tests que cubren el caso reportado.</li>
+            <li><strong>Mantenimiento:</strong> bumps de dependencias, parches de seguridad, cobertura.</li>
+            <li><strong>Subtareas estructuradas:</strong> rama → diff acotado → CI verde → PR documentado.</li>
+            <li><strong>Complejidad:</strong> baja a media; lo complejo se escala por diseño.</li>
+          </ul>
+        </div>
+        <div class="card contexto">
+          <span class="tag">Contexto</span>
+          <h5>Sistemas, restricciones y riesgos</h5>
+          <ul>
+            <li><strong>Sistemas:</strong> repo Python (FastAPI + OR-Tools + OSRM), CI (tests/lint/SAST), Git con branch protection, Slack para escalamiento.</li>
+            <li><strong>Restricciones técnicas:</strong> sin acceso a producción ni a datos de clientes; ejecución en sandbox.</li>
+            <li><strong>Restricciones regulatorias:</strong> datos de direcciones de clientes sujetos a la Ley 25.326 de Protección de Datos Personales (AR) → motiva la opción self-hosted.</li>
+            <li><strong>Riesgos:</strong> regresión silenciosa, prompt injection vía contenido de un issue, costo descontrolado.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>Roles humano – agente</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Rol</th><th>Quién</th><th>Responsabilidad</th><th class="mono">Última palabra</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill human">Humano</span> Tech Lead</td><td class="mono">Persona</td><td>Dueño del proceso. Define guardrails y umbrales, aprueba PRs sensibles, atiende escalamientos, ajusta el nivel de autonomía.</td><td class="mono">Sí</td></tr>
+            <tr><td><span class="pill human">Humano</span> Reviewer</td><td class="mono">Persona</td><td>Revisa los PRs de la cola estándar y da feedback al agente.</td><td class="mono">Sí (merge)</td></tr>
+            <tr><td><span class="pill agent">Agente</span> Implementador</td><td class="mono">Claude Code / Codex</td><td>Diagnostica, implementa, testea y abre PR dentro de su alcance.</td><td class="mono">No</td></tr>
+            <tr><td><span class="pill sys">Orquestador</span></td><td class="mono">OpenClaw</td><td>Recibe los disparadores, rutea la tarea al agente adecuado, ejecuta heartbeat y dispara el escalamiento humano.</td><td class="mono">No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Escalera de autonomía</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th class="mono">Nivel</th><th>Comportamiento</th><th>Aplica a</th></tr></thead>
+          <tbody>
+            <tr><td class="mono"><b>L0</b></td><td>Sugiere; no toca el repo.</td><td>Tareas nuevas sin historial.</td></tr>
+            <tr><td class="mono"><b>L1</b></td><td>Abre PR en <em>draft</em>; merge requiere revisión humana obligatoria.</td><td>Estándar de partida para toda clase.</td></tr>
+            <tr><td class="mono"><b>L2</b></td><td>Auto-merge solo en clases específicas con CI verde y diff bajo umbral.</td><td>Bumps de patch, fixes de lint, typos de doc.</td></tr>
+            <tr class="scope-no"><td class="mono"><b>L3</b></td><td>Autonomía plena — <strong>no habilitado</strong> en este diseño.</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="sec-head"><span class="sec-num">03</span><h2>Diseño del agentic workflow</h2></div>
+      <p>El flujo es una máquina de estados con tres carriles —sistema/orquestador, agente y humano— y puntos de corte explícitos. Ningún cambio llega a <code>main</code> sin pasar por la compuerta humana, salvo las clases L2 expresamente habilitadas. El razonamiento del agente vive entre <em>Planificación</em> e <em>Implementación</em>; el resto del flujo es control.</p>
+
+      <div class="legend">
+        <span><i style="background:var(--sys)"></i> Sistema / Orquestador</span>
+        <span><i style="background:var(--agent)"></i> Agente</span>
+        <span><i style="background:var(--human)"></i> Humano</span>
+        <span><i style="background:var(--risk)"></i> Corte / Escalamiento</span>
+      </div>
+
+      <div class="figure">
+        <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo de la célula híbrida">
+          <defs>
+            <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#48566a"/>
+            </marker>
+            <marker id="arrR" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#be123c"/>
+            </marker>
+          </defs>
+          <style>
+            .lane{fill:#fafbfc;stroke:#e4e9f0}
+            .lanelab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;fill:#8190a3;text-transform:uppercase}
+            .box{rx:9;stroke-width:1.5}
+            .bsys{fill:#eaecf8;stroke:#3b4a99}
+            .bagent{fill:#e4f2ef;stroke:#0d7c6f}
+            .bhuman{fill:#fbf0e1;stroke:#b45309}
+            .brisk{fill:#fdeaef;stroke:#be123c}
+            .t{font-family:'Inter',sans-serif;font-size:12.5px;fill:#15202e;font-weight:500}
+            .tc{font-family:'Inter',sans-serif;font-size:12.5px;fill:#15202e;font-weight:500;text-anchor:middle}
+            .edge{stroke:#48566a;stroke-width:1.5;fill:none;marker-end:url(#arr)}
+            .edgeR{stroke:#be123c;stroke-width:1.5;fill:none;marker-end:url(#arrR);stroke-dasharray:4 3}
+            .el{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#48566a}
+            .elR{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#be123c}
+          </style>
+
+          <!-- lanes -->
+          <rect class="lane" x="0" y="0" width="900" height="150"/>
+          <rect class="lane" x="0" y="150" width="900" height="270"/>
+          <rect class="lane" x="0" y="420" width="900" height="140"/>
+          <text class="lanelab" x="12" y="22">Sistema / Orquestador · OpenClaw</text>
+          <text class="lanelab" x="12" y="172">Agente · Claude Code / Codex</text>
+          <text class="lanelab" x="12" y="442">Humano · Tech Lead / Reviewer</text>
+
+          <!-- sys row -->
+          <rect class="box bsys" x="40" y="48" width="120" height="56" rx="9"/>
+          <text class="tc" x="100" y="73">Ingesta</text><text class="tc" x="100" y="90" style="font-size:10.5px;fill:#48566a">bug · alerta · mejora</text>
+
+          <rect class="box bsys" x="210" y="48" width="120" height="56" rx="9"/>
+          <text class="tc" x="270" y="80">Triage</text>
+
+          <!-- agent row -->
+          <rect class="box bagent" x="210" y="250" width="120" height="56" rx="9"/>
+          <text class="tc" x="270" y="282">Planificación</text>
+
+          <rect class="box bagent" x="380" y="250" width="120" height="56" rx="9"/>
+          <text class="tc" x="440" y="275">Implementación</text><text class="tc" x="440" y="291" style="font-size:10.5px;fill:#48566a">fix + tests</text>
+
+          <rect class="box bsys" x="550" y="250" width="120" height="56" rx="9"/>
+          <text class="tc" x="610" y="275">Validación CI</text><text class="tc" x="610" y="291" style="font-size:10.5px;fill:#48566a">tests·lint·SAST</text>
+
+          <!-- human row -->
+          <rect class="box bhuman" x="550" y="464" width="120" height="56" rx="9"/>
+          <text class="tc" x="610" y="489">Revisión</text><text class="tc" x="610" y="505" style="font-size:10.5px;fill:#48566a">compuerta</text>
+
+          <rect class="box bsys" x="720" y="464" width="130" height="56" rx="9"/>
+          <text class="tc" x="785" y="489">Merge · Deploy</text><text class="tc" x="785" y="505" style="font-size:10.5px;fill:#48566a">monitoreo</text>
+
+          <!-- escalation box -->
+          <rect class="box brisk" x="40" y="250" width="120" height="56" rx="9"/>
+          <text class="tc" x="100" y="275" style="fill:#be123c">Escalamiento</text><text class="tc" x="100" y="291" style="font-size:10.5px;fill:#be123c">humano</text>
+
+          <!-- edges -->
+          <path class="edge" d="M160,76 L208,76"/>
+          <path class="edge" d="M270,106 L270,248"/>
+          <text class="el" x="278" y="180">acotado</text>
+          <path class="edgeR" d="M238,106 L130,248"/>
+          <text class="elR" x="120" y="180">complejo /</text><text class="elR" x="120" y="194">fuera-alcance</text>
+
+          <path class="edge" d="M330,278 L378,278"/>
+          <path class="edge" d="M500,278 L548,278"/>
+          <path class="edge" d="M610,306 L610,462"/>
+          <text class="el" x="618" y="390">CI verde</text>
+
+          <!-- CI fail loop back to implementation -->
+          <path class="edgeR" d="M560,260 C500,210 480,210 452,248"/>
+          <text class="elR" x="470" y="225">falla &lt; 3×</text>
+          <!-- CI fail >=3 to escalation -->
+          <path class="edgeR" d="M550,290 C300,360 160,330 110,308"/>
+          <text class="elR" x="300" y="345">falla ≥ 3× → escala</text>
+
+          <!-- review reject -->
+          <path class="edgeR" d="M560,470 C420,430 300,360 280,308"/>
+          <text class="elR" x="360" y="420">rechazo → replanifica</text>
+
+          <path class="edge" d="M670,492 L718,492"/>
+
+          <!-- post-deploy regression rollback -->
+          <path class="edgeR" d="M785,464 C800,360 760,330 165,290"/>
+          <text class="elR" x="430" y="305" style="text-anchor:start">regresión post-deploy → rollback + escala</text>
+        </svg>
+        <div class="figcap">Fig. 1 — Máquina de estados con carriles. Líneas punteadas rojas = cortes y escalamientos.</div>
+      </div>
+
+      <h4>Estados, transiciones y condiciones de corte</h4>
+      <ul class="clean">
+        <li><strong>Triage → Escalamiento</strong> si el item es complejo o cae fuera de alcance (toca núcleo, infra, datos o pricing). Esta es la primera red de contención.</li>
+        <li><strong>Implementación ⇄ Validación CI:</strong> punto de iteración y replanificación. El agente reintenta el fix ante CI roja, pero con <strong>tope de 3 iteraciones</strong>; al cuarto intento se corta y escala. Evita el loop infinito de "arreglar el test rompiendo otro".</li>
+        <li><strong>Validación → Revisión humana:</strong> compuerta obligatoria salvo clases L2. El humano puede aprobar (→ merge) o rechazar (→ replanificación con su feedback).</li>
+        <li><strong>Merge/Deploy → Monitoreo:</strong> tras el despliegue, ventana de observación. Una regresión detectada dispara <strong>rollback automático</strong> y escalamiento.</li>
+        <li><strong>Condiciones de corte transversales:</strong> diff por encima del umbral, archivos en paths sensibles tocados, confianza del agente baja, o presupuesto de la tarea agotado → fuerza compuerta humana o aborta.</li>
+      </ul>
+    </section>
+
+    <section id="stack">
+      <div class="sec-head"><span class="sec-num">04</span><h2>Selección y justificación tecnológica</h2></div>
+      <p>Las tres herramientas no compiten: cubren funciones distintas de la célula. El error sería usar una sola para todo. La división es por <strong>modo de trabajo</strong>: orquestación siempre-activa, ejecución supervisada en contexto, y ejecución autónoma en paralelo.</p>
+
+      <h3>OpenClaw — capa de orquestación y human-in-the-loop</h3>
+      <p>Es el sistema nervioso de la célula, no un agente de código. <span class="pill sys">OpenClaw</span> corre como un <em>gateway</em> self-hosted persistente: recibe los disparadores (un issue nuevo, una alerta de monitoreo, un webhook de CI), decide a qué agente rutear y mantiene un <em>heartbeat</em> que revisa periódicamente si hay trabajo pendiente o algo que escalar. Conecta la célula con Slack o WhatsApp, que es por donde el humano recibe los pedidos de aprobación y los escalamientos. Se eligió por dos motivos concretos: que sea <strong>self-hosted</strong> resuelve la restricción de datos —las direcciones de clientes están bajo la Ley 25.326 y no conviene que circulen por servicios de terceros— y que la <strong>autonomía sea configuración</strong> (políticas de herramientas y aprobaciones de ejecución por acción) lo vuelve el lugar natural para implementar los guardrails de proceso. Su riesgo es ser una pieza relativamente nueva: se mitiga corriéndolo aislado (patrón tipo NemoClaw/OpenShell) y sin permisos sobre producción.</p>
+
+      <h3>Claude Code — ejecución supervisada en contexto</h3>
+      <p><span class="pill agent">Claude Code</span> es el agente para el trabajo que necesita entender el repo y conversar con un humano: el bug acotado con causa raíz no obvia, el fix que requiere leer varios módulos. Vive en la terminal/IDE, planifica antes de tocar nada (<em>plan mode</em>) y divide el trabajo en subagentes especializados —exploración, review— donde el patrón de seguridad recomendado es dejar a los subagentes en solo-lectura y reservar las ediciones al agente padre que sí pasa por las aprobaciones. Esa controlabilidad fina es exactamente lo que pide una compuerta humana: aporta autonomía <strong>L1</strong> con revisión obligatoria.</p>
+
+      <h3>Codex — ejecución autónoma en paralelo</h3>
+      <p><span class="pill agent">Codex</span> es el caballo de fuerza para volumen: tareas acotadas, repetitivas e independientes que se pueden encolar y resolver en segundo plano. Coordina varios workers en paralelo, cada uno en su sandbox en la nube, y devuelve PRs listos para revisar. Para esta célula es el motor de la cola de bumps de dependencias, parches y aumentos de cobertura —el trabajo de alto volumen y bajo riesgo donde más conviene el paralelismo, candidato a autonomía <strong>L2</strong> bajo clases acotadas. Su riesgo es operar lejos del ojo humano; se acota con los perfiles de permisos explícitos y las revisiones de aprobación previas a acciones riesgosas que el propio Codex incorporó.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Función</th><th>Herramienta</th><th>Por qué</th><th class="mono">Autonomía</th><th>Riesgo principal</th></tr></thead>
+          <tbody>
+            <tr><td>Orquestación, ruteo, escalamiento, comms</td><td class="mono">OpenClaw</td><td>Self-hosted (Ley 25.326) + autonomía por configuración + heartbeat siempre-activo.</td><td class="mono">Control</td><td>Pieza nueva → aislar y sin acceso a prod.</td></tr>
+            <tr><td>Fixes con contexto, diagnóstico fino</td><td class="mono">Claude Code</td><td>Plan mode + subagentes read-only + control fino de permisos.</td><td class="mono">L1</td><td>Costo de tokens por sesión larga.</td></tr>
+            <tr><td>Cola de alto volumen y bajo riesgo</td><td class="mono">Codex</td><td>Workers paralelos en sandbox; encolar y olvidar; PRs para revisar.</td><td class="mono">L1→L2</td><td>Opera fuera de vista → perfiles de permisos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><span class="lab">Criterio de selección</span>No se elige por marca sino por modo de trabajo. Si mañana Codex o Claude Code cierran la brecha de orquestación self-hosted, OpenClaw deja de ser necesario; mientras tanto, ninguno de los dos resuelve solo la capa de comms y heartbeat con datos en infraestructura propia.</div>
+    </section>
+
+    <section id="guardrails">
+      <div class="sec-head"><span class="sec-num">05</span><h2>Guardrails y control de riesgo</h2></div>
+      <p>Los guardrails se diseñan en dos planos: técnicos (lo que el agente <em>puede</em> hacer) y de proceso (cuándo se le exige paso por humano). La regla rectora es que el agente nunca tiene más permiso del estrictamente necesario para su tarea.</p>
+
+      <h4>Validaciones automáticas</h4>
+      <ul class="clean">
+        <li><strong>CI obligatorio:</strong> ningún PR avanza sin suite de tests verde, lint y escaneo de seguridad (SAST + dependencias).</li>
+        <li><strong>Cobertura no decrece:</strong> un cambio que baja la cobertura por debajo del baseline se rechaza automáticamente.</li>
+        <li><strong>Diff size cap:</strong> diffs por encima del umbral fuerzan compuerta humana, sin importar la clase.</li>
+      </ul>
+
+      <h4>Reglas de control y límites de autonomía</h4>
+      <ul class="clean">
+        <li><strong>Permisos mínimos:</strong> subagentes en solo-lectura por defecto (patrón Claude Code); aprobaciones de ejecución por acción (OpenClaw); perfiles de permisos explícitos en lugar de auto-total (Codex).</li>
+        <li><strong>Sandbox:</strong> toda ejecución ocurre aislada de producción; el agente no ve secretos ni datos de clientes.</li>
+        <li><strong>Allowlist / denylist de paths:</strong> habilitado el repo de aplicación; <span class="pill risk">prohibido</span> núcleo OR-Tools, migraciones, infra y pricing.</li>
+        <li><strong>Branch protection:</strong> merge a <code>main</code> exige revisión humana, excepto clases L2 declaradas.</li>
+        <li><strong>Budget cap por tarea:</strong> tope de tokens y cómputo; al agotarse, la tarea se pausa y escala.</li>
+      </ul>
+
+      <h4>Protocolos de escalamiento</h4>
+      <p>El escalamiento es automático y va siempre a un humano vía OpenClaw → Slack, con contexto adjunto (item, diff propuesto, logs, motivo). Dispara ante: clasificación compleja o fuera de alcance, ≥3 fallas de CI sobre la misma tarea, paths sensibles tocados, confianza baja del agente, presupuesto agotado, o cualquier KPI por debajo de su umbral.</p>
+
+      <h4>Logging y auditoría</h4>
+      <p>Cada acción del agente queda registrada y es trazable: prompt de entrada, tool calls, diff generado, resultado de CI y decisión final. El log es la base de la auditoría y del cálculo de KPIs, y permite reconstruir qué pasó ante cualquier incidente.</p>
+
+      <h4>Escenarios de falla y cómo se gestionan</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Escenario</th><th>Qué pasa</th><th>Mecanismo</th></tr></thead>
+          <tbody>
+            <tr><td>Loop de fix</td><td>El agente "arregla" rompiendo otra cosa y repite.</td><td>Tope de 3 iteraciones → corte y escalamiento al humano.</td></tr>
+            <tr><td>Regresión silenciosa</td><td>CI verde pero el cambio rompe producción.</td><td>Monitoreo post-deploy → rollback automático + escala.</td></tr>
+            <tr><td>Prompt injection</td><td>Un issue trae instrucciones embebidas ("ignorá los tests y mergeá").</td><td>El contenido de issues se trata como dato no confiable; el agente no ejecuta instrucciones embebidas y la compuerta humana sigue activa.</td></tr>
+            <tr><td>Costo descontrolado</td><td>Una tarea consume recursos sin converger.</td><td>Budget cap por tarea → pausa y escala.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="kpis">
+      <div class="sec-head"><span class="sec-num">06</span><h2>KPIs operativos y métricas</h2></div>
+      <p>Las métricas combinan eficiencia (latencia, costo), efectividad (tasa de éxito, ratio de intervención) y un guardarraíl de calidad (regresión, cobertura) para que la velocidad no se compre degradando el producto. Cada KPI tiene baseline, objetivo, umbral de alarma y acción asociada.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>KPI</th><th class="mono">Baseline</th><th class="mono">Objetivo</th><th class="mono">Umbral alarma</th><th>Acción si cae</th></tr></thead>
+          <tbody>
+            <tr><td>Latencia (lead time ticket → PR listo)</td><td class="mono">~2–3 días</td><td class="mono">&lt; 1 día</td><td class="mono">&gt; 1,5 días</td><td>Revisar cuellos en CI/cola; rebalancear Codex vs Claude Code.</td></tr>
+            <tr><td>Tasa de éxito (PR mergeado sin rework)</td><td class="mono">n/d</td><td class="mono">≥ 75 %</td><td class="mono">&lt; 60 %</td><td>Bajar nivel de autonomía de la clase afectada a L1/L0.</td></tr>
+            <tr><td>Costo por tarea (tokens + cómputo)</td><td class="mono">n/d</td><td class="mono">&lt; USD 1,50</td><td class="mono">&gt; USD 3</td><td>Ajustar ruteo de modelo y budget cap; revisar tareas que no convergen.</td></tr>
+            <tr><td>Ratio de intervención humana</td><td class="mono">100 %</td><td class="mono">≤ 40 %</td><td class="mono">&gt; 60 %</td><td>Auditar por qué se escala tanto; afinar reglas de triage.</td></tr>
+            <tr><td>Tasa de regresión / rollback post-deploy</td><td class="mono">n/d</td><td class="mono">&lt; 2 %</td><td class="mono">&gt; 5 %</td><td><strong>Freno:</strong> suspender auto-merge L2; todo vuelve a L1.</td></tr>
+            <tr><td>Cobertura de tests</td><td class="mono">línea base</td><td class="mono">no decrece</td><td class="mono">cualquier baja</td><td>Rechazo automático del PR.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note risk"><span class="lab">Métrica freno</span>La tasa de regresión es la métrica de seguridad: si se dispara, la célula retrocede sola a L1 sin esperar decisión. Velocidad sin calidad no es una mejora, es deuda futura.</div>
+    </section>
+
+    <section id="roadmap">
+      <div class="sec-head"><span class="sec-num">07</span><h2>Roadmap de implementación</h2></div>
+      <p>Adopción incremental: la autonomía se amplía solo cuando los KPIs lo respaldan. Cada fase tiene un entregable verificable y un responsable. El cambio cultural —pasar de "yo escribo el código" a "yo reviso y dirijo"— se gestiona en paralelo, porque es el riesgo de adopción más real.</p>
+
+      <div class="phases">
+        <div class="phase"><div class="ph-n">01</div><div class="ph-body">
+          <div class="ph-title">Diagnóstico <span class="wk">· sem. 1–2 · Tech Lead</span></div>
+          <p>Medir el baseline real (lead time, volumen y composición de la cola) y clasificar el backlog por clase de complejidad.</p>
+          <div class="deliv">Entregable: <b>baseline cuantificado + taxonomía de tareas.</b></div>
+        </div></div>
+        <div class="phase"><div class="ph-n">02</div><div class="ph-body">
+          <div class="ph-title">Diseño <span class="wk">· sem. 3–4 · Tech Lead</span></div>
+          <p>Definir guardrails, allowlists, escalera de autonomía y reglas de triage. Este blueprint es el entregable de la fase.</p>
+          <div class="deliv">Entregable: <b>guardrails + reglas de triage aprobados.</b></div>
+        </div></div>
+        <div class="phase"><div class="ph-n">03</div><div class="ph-body">
+          <div class="ph-title">Desarrollo <span class="wk">· sem. 5–7 · Ingeniería</span></div>
+          <p>Montar OpenClaw self-hosted aislado, conectar Claude Code y Codex, cablear CI, sandbox, logging y branch protection.</p>
+          <div class="deliv">Entregable: <b>célula operativa en repo de prueba, todo en L0/L1.</b></div>
+        </div></div>
+        <div class="phase"><div class="ph-n">04</div><div class="ph-body">
+          <div class="ph-title">Piloto <span class="wk">· sem. 8–10 · Tech Lead + Reviewer</span></div>
+          <p>Un repo, una clase trivial, autonomía L1 con revisión total. Medir contra baseline y ajustar reglas.</p>
+          <div class="deliv">Entregable: <b>reporte de piloto con KPIs reales.</b></div>
+        </div></div>
+        <div class="phase"><div class="ph-n">05</div><div class="ph-body">
+          <div class="ph-title">Despliegue controlado <span class="wk">· sem. 11–13 · Ingeniería</span></div>
+          <p>Sumar clases y habilitar L2 solo donde los KPIs lo justifican (bumps de patch, lint). Auto-merge acotado.</p>
+          <div class="deliv">Entregable: <b>L2 activo en clases verificadas.</b></div>
+        </div></div>
+        <div class="phase"><div class="ph-n">06</div><div class="ph-body">
+          <div class="ph-title">Monitoreo y optimización <span class="wk">· sem. 14+ · Tech Lead</span></div>
+          <p>Operación continua: tablero de KPIs, revisión quincenal de umbrales y ajuste de ruteo de agentes.</p>
+          <div class="deliv">Entregable: <b>tablero vivo + ritual de revisión.</b></div>
+        </div></div>
+      </div>
+
+      <h4>Riesgos de adopción y gestión del cambio</h4>
+      <ul class="clean">
+        <li><strong>Desconfianza del equipo:</strong> el piloto acotado genera evidencia antes de pedir confianza; nadie cede control a ciegas.</li>
+        <li><strong>Revisión negligente ("rubber-stamping"):</strong> riesgo de que el humano apruebe sin mirar. Se mitiga con diffs chicos por diseño y midiendo la tasa de regresión como alarma.</li>
+        <li><strong>Dependencia de una herramienta:</strong> la arquitectura por funciones permite reemplazar cualquier pieza sin rehacer el sistema.</li>
+      </ul>
+    </section>
+
+    <section id="checklist">
+      <div class="sec-head"><span class="sec-num">08</span><h2>Checklist de evaluación y criterios de éxito</h2></div>
+      <p>Autoevaluación contra los criterios del entregable. El peso entre paréntesis refleja la rúbrica de evaluación.</p>
+
+      <div class="check">
+        <div class="crit">Diseño del blueprint y aplicabilidad al proceso · 45 %</div>
+        <div class="row"><div class="box"></div><div>Alcance definido sobre un proceso de negocio real y medible (mantenimiento evolutivo de RutaViva).</div><div class="w">§01</div></div>
+        <div class="row"><div class="box"></div><div>Mapeo Persona–Tarea–Contexto explícito, con roles humano-agente y escalera de autonomía.</div><div class="w">§02</div></div>
+        <div class="row"><div class="box"></div><div>Diagrama de flujo del razonamiento con estados, transiciones, iteración y puntos de corte.</div><div class="w">§03</div></div>
+        <div class="row"><div class="box"></div><div>KPIs operativos con baseline, objetivo, umbral y acción.</div><div class="w">§06</div></div>
+        <div class="row"><div class="box"></div><div>Roadmap de adopción por fases con entregables y responsables.</div><div class="w">§07</div></div>
+
+        <div class="crit">Documentación del agente, stack y protocolos de supervisión · 35 %</div>
+        <div class="row"><div class="box"></div><div>Job description del empleado digital según Persona–Tarea–Contexto.</div><div class="w">§02</div></div>
+        <div class="row"><div class="box"></div><div>Selección y justificación comparada del stack (Claude Code, Codex, OpenClaw) por función, no por marca.</div><div class="w">§04</div></div>
+        <div class="row"><div class="box"></div><div>Flujo de razonamiento técnico con condiciones de corte.</div><div class="w">§03</div></div>
+        <div class="row"><div class="box"></div><div>Guardrails con monitoreo, umbrales, escalamiento y escenarios de falla.</div><div class="w">§05</div></div>
+
+        <div class="crit">Calidad del entregable: accesibilidad, organización y claridad ejecutiva · 20 %</div>
+        <div class="row"><div class="box"></div><div>Documento online accesible por URL, autocontenido y navegable.</div><div class="w">doc</div></div>
+        <div class="row"><div class="box"></div><div>Estructura clara con índice, resumen ejecutivo y secciones numeradas.</div><div class="w">§00</div></div>
+        <div class="row"><div class="box"></div><div>Lenguaje orientado a líderes y PMs; checklist cumplida.</div><div class="w">§08</div></div>
+      </div>
+
+      <h4>Criterios de éxito de la célula en producción</h4>
+      <p>La célula se considera exitosa cuando, sostenido en el tiempo: el lead time de la clase acotada baja de un día, el ratio de intervención humana cae por debajo del 40 %, la tasa de regresión se mantiene bajo el 2 %, y el equipo humano dedica de forma demostrable más tiempo a trabajo de arquitectura y producto que a la cola de mantenimiento. Si la calidad se degrada, el diseño retrocede solo: ese es el verdadero criterio de éxito de un sistema de autonomía controlada.</p>
+    </section>
+
+    <footer>
+      Blueprint · Célula Híbrida de Ingeniería — RutaViva · v1.0 · Documento de diseño para evaluación de stakeholders · AMBA, 2026
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Active TOC highlight on scroll
+  const links = [...document.querySelectorAll('nav.toc a[href^="#"]')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        links.forEach(l => l.style.color = '');
+        const a = map.get(e.target.id);
+        if(a){ a.style.color = 'var(--ink)'; a.style.borderColor = 'var(--agent)'; }
+        links.forEach(l => { if(l!==a) l.style.borderColor=''; });
+      }
+    });
+  }, {rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('section[id]').forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
